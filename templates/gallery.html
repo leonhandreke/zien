@@ -15,7 +15,9 @@
   </head>
   <body>
 
+    {% if images %}
     <a href="{{ url_for('gallery_as_zip', gallery_id=gallery_id) }}">Download Gallery</a>
+    {% endif %}
 
     <div id="gallery-container">
       {% for image in images %}
