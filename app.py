@@ -13,6 +13,11 @@ app = Flask(__name__)
 app.config.from_object('config')
 
 
+@app.route("/")
+def redirect_to_new_gallery():
+    return redirect(url_for('gallery', gallery_id=uuid.uuid4()))
+
+
 @app.route("/g/<gallery_id>", methods=['GET', 'POST'])
 def gallery(gallery_id):
     # Only UUIDs are allowed for sanity
