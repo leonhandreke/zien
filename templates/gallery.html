@@ -15,18 +15,22 @@
   </head>
   <body>
 
-    {% if images %}
-    <a href="{{ url_for('gallery_as_zip', gallery_id=gallery_id) }}">Download Gallery</a>
-    {% endif %}
+    <div id="header">
+      {% if images %}
+      <a href="{{ url_for('gallery_as_zip', gallery_id=gallery_id) }}">Download</a>
+      {% endif %}
+    </div>
 
     <div id="gallery-container">
       {% for image in images %}
-      <div><img src="{{ image }}"></div>
+      <a href="{{ image }}"><div><img src="{{ image }}"></div></a>
       {% endfor %}
     </div>
 
-    <form class="dropzone" id="image-upload-zone" action="{{ upload_path }}">
-    </form>
+    <div id="image-upload-zone-container">
+      <form class="dropzone" id="image-upload-zone" action="{{ upload_path }}">
+      </form>
+    </div>
   </body>
 </html>
 

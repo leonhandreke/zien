@@ -1,6 +1,42 @@
+@font-face {
+    font-family: 'Montserrat Regular';
+    src: url('/static/font/montserrat-regular.woff2') formamt('woff2');
+}
+
+body {
+    background: white;
+    font-family: 'Montserrat Regular', sans-serif;
+}
+
+a:hover, a:visited, a:link, a:active
+{
+    text-decoration: none;
+    color: black;
+}
+
+
+#header {
+    border: 30px;
+    text-transform: uppercase;
+    text-align: right;
+    padding: 10px;
+}
+
+#gallery-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
 #gallery-container div {
-    width: 100%;
+    height: 300px;
+    border: 1px solid white;
 }
 #gallery-container div img {
-    width: 100%;
+    height: 100%;
+    image-orientation: from-image;
+}
+
+#image-upload-zone-container {
+    padding-top: 10px;
 }
