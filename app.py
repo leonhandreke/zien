@@ -8,6 +8,8 @@ from flask import Flask, render_template, send_from_directory, abort, request, r
         send_file
 
 from werkzeug.utils import secure_filename
+import exifread
+import arrow
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -36,12 +38,30 @@ def show_gallery(gallery_id):
     gallery_dir = get_gallery_dir(gallery_id)
 
     if os.path.exists(gallery_dir):
-        images = [
-                os.path.join("/g", gallery_id, f)
-                for f in os.listdir(gallery_dir)
-                ]
+        filenames = os.listdir(gallery_dir)
     else:
-        images = []
+        filenames = []
+
+    # Sort images by date
+    dates_images = []
+    for filename in filenames:
+        f = open(os.path.join(gallery_dir, filename), 'rb')
+        try:
+            date_string = exifread.process_file(f)['EXIF DateTimeOriginal'].values
+        except KeyError:
+            date_string = ''
+
+        f.close()
+        try:
+            date = arrow.get(date_string, 'YYYY:MM:DD HH:mm:ss')
+        except arrow.parser.ParserError:
+            date = arrow.get(0)
+
+        dates_images.append((date, filename))
+
+    filenames = [t[1] for t in sorted(dates_images)]
+
+    images = [url_for('show_image', filename=os.path.join(gallery_id, f)) for f in filenames]
 
     return render_template("gallery.html",
             images=images,
@@ -98,7 +118,7 @@ def gallery_as_zip(gallery_id):
 
 
 @app.route("/g/<path:filename>")
-def serve_image(filename):
+def show_image(filename):
     return send_from_directory(app.config["DATA_DIR"], filename)
 
 
